@@ -107,57 +107,11 @@
 
       // --- Utilities ---
 
-      // FadeIn Component for Scroll Animations
-      const FadeIn = ({ children, delay = 0, direction = 'up', className = '' }) => {
-        const [isVisible, setIsVisible] = useState(false);
-        const ref = useRef(null);
-
-        useEffect(() => {
-          const observer = new IntersectionObserver(
-            ([entry]) => {
-              if (entry.isIntersecting) {
-                setIsVisible(true);
-                observer.unobserve(entry.target);
-              }
-            },
-            {
-              threshold: 0.05,
-              rootMargin: '50px' 
-            }
-          );
-
-          if (ref.current) {
-            observer.observe(ref.current);
-          }
-
-          return () => {
-            if (ref.current) {
-              observer.unobserve(ref.current);
-            }
-          };
-        }, []);
-
-        const getTransform = () => {
-          if (!isVisible) {
-            switch (direction) {
-              case 'up': return 'translate-y-4';
-              case 'down': return '-translate-y-4';
-              case 'left': return 'translate-x-4';
-              case 'right': return '-translate-x-4';
-              default: return 'translate-y-4';
-            }
-          }
-          return 'translate-y-0 translate-x-0';
-        };
-
+      // FadeIn Component - Simplified to remove scroll animations
+      // Now acts as a simple pass-through wrapper
+      const FadeIn = ({ children, className = '' }) => {
         return (
-          <div
-            ref={ref}
-            className={`transition-all duration-500 ease-out ${className} ${
-              isVisible ? 'opacity-100' : 'opacity-0'
-            } ${getTransform()}`}
-            style={{ transitionDelay: `${delay}ms` }}
-          >
+          <div className={className}>
             {children}
           </div>
         );
@@ -638,10 +592,10 @@
               </div>
 
               {/* Items Grid - Filtered */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 min-h-[400px]">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 min-h-[400px] items-start">
                 {filteredItems.map((item, index) => (
-                  <FadeIn key={item.id} delay={index * 50} className="h-full">
-                    <div className="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 h-full flex flex-col justify-between">
+                  <FadeIn key={item.id} className="">
+                    <div className="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 flex flex-col">
                       <div>
                         <div className="flex justify-between items-start gap-3 mb-2">
                           <h4 className="font-bold text-lg text-gray-800 font-serif leading-tight">
