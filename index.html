@@ -611,13 +611,14 @@
               </FadeIn>
 
               {/* Category Navigation */}
-              <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-10 sticky top-20 z-30 bg-white/95 backdrop-blur py-3 -mx-4 px-4 md:mx-0 md:static md:bg-transparent md:py-0">
+              <div className="sticky top-[60px] z-30 bg-white/95 backdrop-blur-md -mx-4 px-4 md:mx-0 md:bg-transparent md:static md:p-0 mb-6 md:mb-10 shadow-sm md:shadow-none py-3">
+                <div className="flex flex-nowrap md:flex-wrap overflow-x-auto md:overflow-visible gap-3 md:justify-center no-scrollbar pb-1 md:pb-0 items-center">
                 {categories.map((cat, idx) => (
                    // Simple animation for pills not using FadeIn to avoid layout shifts on sticky
                   <button
                     key={cat.id}
                     onClick={() => setActiveCategory(cat.id)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-full font-bold text-sm transition-all transform duration-300 ${
+                    className={`flex items-center gap-2 px-4 py-2 rounded-full font-bold text-sm transition-all transform duration-300 whitespace-nowrap flex-shrink-0 ${
                       activeCategory === cat.id
                         ? 'bg-tostatto-green text-white shadow-md ring-2 ring-tostatto-green ring-offset-2 scale-105'
                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:scale-105'
@@ -627,23 +628,26 @@
                     {cat.label}
                   </button>
                 ))}
+                </div>
               </div>
 
               {/* Items Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4 min-h-[200px]">
                 {filteredItems.map((item, index) => (
-                  <FadeIn key={item.id} delay={index * 50}>
-                    <div className="bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-all border border-gray-100 group hover:-translate-y-1 duration-200 relative">
-                      <div className="flex justify-between items-start gap-3">
-                        <h4 className="font-bold text-base md:text-lg text-gray-800 group-hover:text-tostatto-green transition-colors font-serif leading-tight">
-                          {item.name}
-                        </h4>
-                        <span className="font-bold text-tostatto-green text-base whitespace-nowrap flex-shrink-0">{item.price.toFixed(2)}€</span>
+                  <FadeIn key={item.id} delay={index * 50} className="h-full">
+                    <div className="bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-all border border-gray-100 group hover:-translate-y-1 duration-200 relative h-full flex flex-col justify-between">
+                      <div>
+                        <div className="flex justify-between items-start gap-3 mb-1">
+                          <h4 className="font-bold text-base md:text-lg text-gray-800 group-hover:text-tostatto-green transition-colors font-serif leading-tight">
+                            {item.name}
+                          </h4>
+                          <span className="font-bold text-tostatto-green text-base whitespace-nowrap flex-shrink-0">{item.price.toFixed(2)}€</span>
+                        </div>
+                        
+                        {item.description && <p className="text-gray-500 text-xs md:text-sm mt-1 leading-relaxed">{item.description}</p>}
                       </div>
                       
-                      {item.description && <p className="text-gray-500 text-xs md:text-sm mt-1 leading-relaxed">{item.description}</p>}
-                      
-                      <div className="flex gap-2 mt-2">
+                      <div className="flex gap-2 mt-3">
                         {item.isSpicy && (
                           <span className="text-[10px] px-2 py-0.5 bg-red-50 text-red-600 rounded-full flex items-center gap-1 font-bold border border-red-100">
                             <Flame size={10}/> Picante
