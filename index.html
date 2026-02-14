@@ -86,6 +86,13 @@
           -ms-overflow-style: none;  /* IE and Edge */
           scrollbar-width: none;  /* Firefox */
       }
+      /* Performance optimizations */
+      .will-change-transform {
+        will-change: transform;
+      }
+      .will-change-opacity-transform {
+        will-change: opacity, transform;
+      }
     </style>
   </head>
   <body>
@@ -118,7 +125,7 @@
             },
             {
               threshold: 0.1,
-              rootMargin: '0px 0px -10px 0px' // Changed from -50px to -10px to trigger earlier
+              rootMargin: '0px 0px -10px 0px' 
             }
           );
 
@@ -136,7 +143,7 @@
         const getTransform = () => {
           if (!isVisible) {
             switch (direction) {
-              case 'up': return 'translate-y-8'; // Reduced distance for faster feel
+              case 'up': return 'translate-y-8';
               case 'down': return '-translate-y-8';
               case 'left': return 'translate-x-8';
               case 'right': return '-translate-x-8';
@@ -149,7 +156,7 @@
         return (
           <div
             ref={ref}
-            className={`transition-all duration-500 ease-out ${className} ${ // Changed duration-1000 to duration-500 (faster)
+            className={`transition-all duration-500 ease-out will-change-opacity-transform ${className} ${
               isVisible ? 'opacity-100 blur-0' : 'opacity-0 blur-sm'
             } ${getTransform()}`}
             style={{ transitionDelay: `${delay}ms` }}
@@ -168,11 +175,14 @@
 
         useEffect(() => {
           const handleScroll = () => {
-            setIsScrolled(window.scrollY > 20);
+            const scrolled = window.scrollY > 20;
+            if (isScrolled !== scrolled) {
+               setIsScrolled(scrolled);
+            }
           };
-          window.addEventListener('scroll', handleScroll);
+          window.addEventListener('scroll', handleScroll, { passive: true });
           return () => window.removeEventListener('scroll', handleScroll);
-        }, []);
+        }, [isScrolled]);
 
         const navItems = [
           { label: 'Inicio', href: '#home' },
@@ -289,9 +299,9 @@
               <img
                 src="https://images.unsplash.com/photo-1626074353765-517a681e40be?q=80&w=2000&auto=format&fit=crop"
                 alt="Sándwich pulled pork fresco"
-                className="w-full h-full object-cover animate-slow-zoom"
+                className="w-full h-full object-cover animate-slow-zoom will-change-transform"
               />
-              <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]"></div>
+              <div className="absolute inset-0 bg-black/50"></div>
             </div>
 
             <div className="relative z-10 container mx-auto px-4 text-center text-white w-full">
@@ -742,7 +752,7 @@
                       <img
                         src={`${src}&auto=format&fit=crop`}
                         alt="Gallery item"
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 will-change-transform"
                         loading="lazy"
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100 backdrop-blur-[1px]">
@@ -1045,7 +1055,7 @@
             href="https://wa.me/34604954312"
             target="_blank"
             rel="noopener noreferrer"
-            className="fixed bottom-6 right-6 z-40 bg-[#25D366] text-white p-4 rounded-full shadow-lg hover:scale-110 transition-transform duration-300 flex items-center justify-center group animate-pulse-slow"
+            className="fixed bottom-6 right-6 z-40 bg-[#25D366] text-white p-4 rounded-full shadow-lg hover:scale-110 transition-transform duration-300 flex items-center justify-center group animate-pulse-slow will-change-transform"
             aria-label="Contactar por WhatsApp"
           >
             <MessageCircle size={28} fill="white" />
